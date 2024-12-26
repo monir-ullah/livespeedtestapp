@@ -177,7 +177,7 @@ class LiveStreamingApp:
         self.avg_download_speed.set(f"{self.total_download_speed / self.speed_checks:.2f} Mbps")
         self.avg_upload_speed.set(f"{self.total_upload_speed / self.speed_checks:.2f} Mbps")
         self.speed_test_count_display.config(text=f"{self.speed_checks}")
-        self.log_message("Initial speed check complete.", color="green")
+        self.log_message("Initial speed check completed.", color="green")
         if not is_internet_active():
             self.log_message("Preventing WiFi sleep by simulating activity...", color="red")
 
@@ -189,10 +189,10 @@ class LiveStreamingApp:
 
     def run_speed_test(self):
         while self.streaming_active:
-            wait_time = random.randint(600, 1200)  # Random wait time between 10-20 minutes
+            wait_time = random.randint(600, 3300)  # Random wait time between 10-55 minutes
             self.log_message(f"Waiting {wait_time // 60} minutes before next speed test...", color="yellow")
             time.sleep(wait_time)
-            if not is_internet_active():
+            if (not is_internet_active()) or is_internet_active():
                 self.log_message("Checking internet speed...", color="yellow")
                 download, upload = check_internet_speed()
                 self.download_speed.set(f"{download:.2f} Mbps")
@@ -205,6 +205,9 @@ class LiveStreamingApp:
                 self.avg_download_speed.set(f"{self.total_download_speed / self.speed_checks:.2f} Mbps")
                 self.avg_upload_speed.set(f"{self.total_upload_speed / self.speed_checks:.2f} Mbps")
                 self.speed_test_count_display.config(text=f"{self.speed_checks}")
+
+                # Log a success message indicating the completion of the speed test
+                self.log_message("Speed Test completed.", color="green")
 
     def update_uptime(self):
         while self.streaming_active:
